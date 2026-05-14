@@ -15,6 +15,13 @@
       "when": 1778772531468,
       "tag": "0001_huge_gamora",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778791991531,
+      "tag": "0002_bumpy_lockheed",
+      "breakpoints": true
     }
   ]
 }
