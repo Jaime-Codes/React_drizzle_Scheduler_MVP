@@ -23,15 +23,20 @@ interface ScheduleEvent {
   color: string;
 }
 
-const Calendar = () => {
+type Props = {
+  events: ScheduleEvent[];
+  setEvents: React.Dispatch<React.SetStateAction<ScheduleEvent[]>>;
+};
+
+const Calendar = ({ events, setEvents }: Props) => {
   const { user } = useAuth();
-  const [events, setEvents] = useState<ScheduleEvent[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAndFormatAppointments() {
       try {
-        const res = await api.get(`/caregivers/appointments`);
+        const res = await api.get(`/appointments`);
         const rawAppointments: BackendAppointment[] = res.data;
 
         // 2. Map backend columns directly to your Mantine view specs

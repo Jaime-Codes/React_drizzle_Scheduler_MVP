@@ -13,9 +13,8 @@ export function CaregiverAvailabilityForm({
   const [end, setEnd] = useState("17:00");
 
   const handleSaveAvailability = async () => {
-    console.log("states go here", day, start, end);
     if (!start || !end) return;
-    console.log("states go here!!!!");
+    
     await api.post("/availability/add", {
       caregiverId,
       dayOfWeek: parseInt(day || "1"),
