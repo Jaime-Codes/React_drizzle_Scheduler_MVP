@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { db } from "../drizzle/src";
+import { db } from "../drizzle/src/seed";
 import {
   caregiverTable,
   clientTable,

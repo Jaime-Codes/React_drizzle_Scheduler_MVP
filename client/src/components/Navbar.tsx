@@ -1,9 +1,9 @@
-import { NavLink } from "react-router";
 import { useAuth } from "../hooks/auth";
-
 import styles from "./Navbar.module.css";
-
+import { Button } from "@mantine/core";
+import { useNavigate } from "react-router";
 const Navbar = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   console.log("this is the user", user);
   const dashboardName =
@@ -11,28 +11,47 @@ const Navbar = () => {
   return (
     <nav className={styles.container}>
       <div className={styles.linkContainer}>
-        <NavLink className={styles.link} to='/' end>
+        <Button size='md' color='blue' onClick={() => navigate("/")}>
           Home
-        </NavLink>
-        <NavLink className={styles.link} to={`${dashboardName}/dashboard`} end>
+        </Button>
+        <Button
+          size='md'
+          color='blue'
+          onClick={() => navigate(`${dashboardName}/dashboard`)}
+        >
           Dashboard
-        </NavLink>
+        </Button>
       </div>
       <div className={styles.linkContainer}>
         {user === null && (
-          <NavLink className={styles.link} to='/login' end>
+          <Button
+            className={styles.link}
+            size='md'
+            color='blue'
+            onClick={() => navigate("/login")}
+          >
             Login
-          </NavLink>
+          </Button>
         )}
         {user && (
-          <NavLink className={styles.link} to='/logout'>
+          <Button
+            className={styles.link}
+            size='md'
+            color='blue'
+            onClick={() => navigate("/Logout")}
+          >
             Logout
-          </NavLink>
+          </Button>
         )}
         {user === null && (
-          <NavLink className={styles.link} to='/register'>
+          <Button
+            className={styles.link}
+            size='md'
+            color='blue'
+            onClick={() => navigate("/register")}
+          >
             Register
-          </NavLink>
+          </Button>
         )}
       </div>
     </nav>

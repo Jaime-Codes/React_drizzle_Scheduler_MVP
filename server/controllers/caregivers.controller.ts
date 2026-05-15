@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { eq, and, sql, gte, lte } from "drizzle-orm";
-import { db } from "../drizzle/src";
+import { db } from "../drizzle/src/seed";
 import { appointmentsTable } from "../drizzle/src/db/schema";
 
 export async function getCaregiverDashboardData(

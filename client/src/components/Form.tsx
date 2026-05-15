@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import api from "../api";
-import LoadingIndicator from "./LoadingIndicator";
+import {
+  TextInput,
+  PasswordInput,
+  Select,
+  Textarea,
+  Button,
+  Paper,
+  Title,
+  Container,
+  Fieldset,
+  LoadingOverlay,
+} from "@mantine/core";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/auth";
+import api from "../api";
 
 interface FormProps {
   route: string;
@@ -21,27 +32,27 @@ export default function Form({ route, method }: FormProps) {
     age: "",
     phone: "",
     role: "client" as "client" | "caregiver",
-    // Caregiver-specific
     licenseNumber: "",
     hourlyRate: "",
     timezone: "CST",
     bio: "",
-    // Client-specific
     address: "",
     emergencyContact: "",
     notes: "",
   });
 
   const isRegister = method === "register";
-  const formTitle = isRegister ? "Register" : "Login";
+  const formTitle = isRegister ? "Create an Account" : "Sign In";
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name: string, value: string | null) => {
+    setFormData((prev) => ({ ...prev, [name]: value || "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,7 +68,6 @@ export default function Form({ route, method }: FormProps) {
           name: formData.name,
           age: formData.age ? parseInt(formData.age, 10) : null,
           phone: formData.phone,
-          // Dynamic role conditional bundling
           profileData:
             formData.role === "caregiver"
               ? {
@@ -88,159 +98,166 @@ export default function Form({ route, method }: FormProps) {
         navigate("/login");
       }
     } catch (error: any) {
-      alert(error.response?.data?.error || "Registration error occurred.");
+      alert(
+        error.response?.data?.error || "Authentication structural failure.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className='form-container'>
-      <h1>{formTitle}</h1>
+    <Container size={460} my={40}>
+      <Paper
+        withBorder
+        shadow='md'
+        p={30}
+        radius='md'
+        style={{ position: "relative" }}
+      >
+        <LoadingOverlay
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+        <Title order={2} ta='center' mb='lg' fw={800}>
+          {formTitle}
+        </Title>
 
-      <input
-        className='form-input'
-        type='email'
-        name='username'
-        value={formData.username}
-        onChange={handleChange}
-        placeholder='Email Address'
-        required
-      />
-      <input
-        className='form-input'
-        type='password'
-        name='password'
-        value={formData.password}
-        onChange={handleChange}
-        placeholder='Password'
-        required
-      />
-
-      {isRegister && (
-        <>
-          <input
-            className='form-input'
-            type='text'
-            name='name'
-            value={formData.name}
-            onChange={handleChange}
-            placeholder='Full Name'
+        <form onSubmit={handleSubmit}>
+          <TextInput
+            label='Email Address'
+            placeholder='you@example.com'
+            name='username'
+            value={formData.username}
+            onChange={handleInputChange}
             required
+            mb='md'
           />
-          <input
-            className='form-input'
-            type='number'
-            name='phone'
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder='Phone Number'
-          />
-          <input
-            className='form-input'
-            type='number'
-            name='age'
-            value={formData.age}
-            onChange={handleChange}
-            placeholder='Age'
-            min='18'
+          <PasswordInput
+            label='Password'
+            placeholder='Your password'
+            name='password'
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+            mb='md'
           />
 
-          <label htmlFor='role'>Register Account As:</label>
-          <select
-            className='form-input'
-            name='role'
-            id='role'
-            value={formData.role}
-            onChange={handleChange}
-          >
-            <option value='client'>Client</option>
-            <option value='caregiver'>Caregiver</option>
-          </select>
-
-          {/* Render Caregiver Fields Dynamically */}
-          {formData.role === "caregiver" && (
-            <fieldset
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                margin: "10px 0",
-              }}
-            >
-              <legend>Caregiver Profile Info</legend>
-              <input
-                className='form-input'
-                type='text'
-                name='licenseNumber'
-                value={formData.licenseNumber}
-                onChange={handleChange}
-                placeholder='License Number'
+          {isRegister && (
+            <>
+              <TextInput
+                label='Full Name'
+                placeholder='John Doe'
+                name='name'
+                value={formData.name}
+                onChange={handleInputChange}
                 required
+                mb='md'
               />
-              <input
-                className='form-input'
+              <TextInput
+                label='Phone Number'
+                placeholder='555-555-5555'
+                name='phone'
+                value={formData.phone}
+                onChange={handleInputChange}
+                mb='md'
+              />
+              <TextInput
+                label='Age'
+                placeholder='Min 18'
                 type='number'
-                name='hourlyRate'
-                value={formData.hourlyRate}
-                onChange={handleChange}
-                placeholder='Hourly Rate ($)'
-                step='0.01'
-                required
+                name='age'
+                value={formData.age}
+                onChange={handleInputChange}
+                mb='md'
               />
-              <textarea
-                className='form-input'
-                name='bio'
-                value={formData.bio}
-                onChange={handleChange}
-                placeholder='Brief Bio Description...'
+
+              <Select
+                label='Account Profile Role'
+                data={[
+                  { value: "client", label: "Client Seeking Care" },
+                  { value: "caregiver", label: "Caregiver Professional" },
+                ]}
+                value={formData.role}
+                onChange={(val) => handleSelectChange("role", val)}
+                mb='md'
               />
-            </fieldset>
+
+              {formData.role === "caregiver" && (
+                <Fieldset
+                  legend='Professional Credentials'
+                  mb='md'
+                  variant='filled'
+                >
+                  <TextInput
+                    label='License Number'
+                    placeholder='RN / CNA state registry tag'
+                    name='licenseNumber'
+                    value={formData.licenseNumber}
+                    onChange={handleInputChange}
+                    required
+                    mb='sm'
+                  />
+                  <TextInput
+                    label='Hourly Rate ($)'
+                    placeholder='35.00'
+                    type='number'
+                    name='hourlyRate'
+                    value={formData.hourlyRate}
+                    onChange={handleInputChange}
+                    required
+                    mb='sm'
+                  />
+                  <Textarea
+                    label='Professional Bio'
+                    placeholder='Tell clients about your specialty care background...'
+                    name='bio'
+                    value={formData.bio}
+                    onChange={handleInputChange}
+                    rows={3}
+                  />
+                </Fieldset>
+              )}
+
+              {formData.role === "client" && (
+                <Fieldset legend='Care Requirements' mb='md' variant='filled'>
+                  <TextInput
+                    label='Home Address'
+                    placeholder='123 Care Lane'
+                    name='address'
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    required
+                    mb='sm'
+                  />
+                  <TextInput
+                    label='Emergency Contact Phone'
+                    placeholder='555-555-5555'
+                    name='emergencyContact'
+                    value={formData.emergencyContact}
+                    onChange={handleInputChange}
+                    required
+                    mb='sm'
+                  />
+                  <Textarea
+                    label='Medical Care Notes'
+                    placeholder='Detail dietary, mobility, or medication schedule instructions...'
+                    name='notes'
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    rows={3}
+                  />
+                </Fieldset>
+              )}
+            </>
           )}
 
-          {/* Render Client Fields Dynamically */}
-          {formData.role === "client" && (
-            <fieldset
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                margin: "10px 0",
-              }}
-            >
-              <legend>Client Profile Info</legend>
-              <input
-                className='form-input'
-                type='text'
-                name='address'
-                value={formData.address}
-                onChange={handleChange}
-                placeholder='Home Address'
-                required
-              />
-              <input
-                className='form-input'
-                type='text'
-                name='emergencyContact'
-                value={formData.emergencyContact}
-                onChange={handleChange}
-                placeholder='Emergency Contact Phone'
-                required
-              />
-              <textarea
-                className='form-input'
-                name='notes'
-                value={formData.notes}
-                onChange={handleChange}
-                placeholder='Special medical or care notes...'
-              />
-            </fieldset>
-          )}
-        </>
-      )}
-
-      {loading && <LoadingIndicator />}
-      <button className='form-button' type='submit' disabled={loading}>
-        {formTitle}
-      </button>
-    </form>
+          <Button type='submit' fullWidth mt='xl' size='md' color='blue'>
+            {isRegister ? "Complete Sign Up" : "Authorize Session"}
+          </Button>
+        </form>
+      </Paper>
+    </Container>
   );
 }
