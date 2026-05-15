@@ -11,6 +11,7 @@ import {
 export const roleEnum = Enum("role", ["admin", "caregiver", "client"]);
 
 export const appointmentStatusEnum = Enum("appointment_status", [
+  "pending",
   "scheduled",
   "completed",
   "cancelled",
@@ -79,5 +80,9 @@ export const appointmentsTable = pgTable("appointments", {
   endTime: timestamp("end_time", { withTimezone: true }).notNull(),
   status: appointmentStatusEnum().notNull().default("scheduled"),
   notes: text(),
+  cancelledBy: roleEnum("cancelled_by"),
+  cancellationReason: text("cancellation_reason"),
+
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });

@@ -21,5 +21,11 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "views/Home.tsx",
+    "views/NotFound.tsx",
+    "views/ClientDashboard.tsx",
+    "views/CaregiverDashboard.tsx"
+  ]
 }

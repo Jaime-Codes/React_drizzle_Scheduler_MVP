@@ -8,6 +8,8 @@ var homeRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var appointmentsRouter = require("./routes/appointments");
 var availabilityRouter = require("./routes/availability");
+var caregiversRouter = require("./routes/caregivers");
+var clientsRouter = require("./routes/clients");
 var authRouter = require("./routes/auth");
 var app = express();
 
@@ -30,4 +32,6 @@ app.use("/users", usersRouter);
 app.use("/appointments", appointmentsRouter);
 app.use("/availability", availabilityRouter);
 app.use("/auth", authRouter);
+app.use("/caregivers", caregiversRouter);
+app.use("/clients", clientsRouter);
 module.exports = app;

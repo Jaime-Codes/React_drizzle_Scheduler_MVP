@@ -22,6 +22,20 @@
       "when": 1778791991531,
       "tag": "0002_bumpy_lockheed",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778856484327,
+      "tag": "0003_same_madripoor",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778869357361,
+      "tag": "0004_high_patch",
+      "breakpoints": true
     }
   ]
 }

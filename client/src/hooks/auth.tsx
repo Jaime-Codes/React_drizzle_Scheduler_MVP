@@ -4,6 +4,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN, USER_DATA } from "../constants";
 interface User {
   id: number;
   email: string;
+  profileId: number | null;
   name: string;
   role: "admin" | "caregiver" | "client";
 }

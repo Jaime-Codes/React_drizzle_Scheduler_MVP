@@ -38,7 +38,6 @@ export const createAppointment = async (
   }
 };
 
-
 export const getAppointmentsWithDetails = async (
   req: Request,
   res: Response,
@@ -86,3 +85,26 @@ export const getAppointmentsWithDetails = async (
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+export async function bookAppointment(req: Request, res: Response) {
+  try {
+    const { caregiverId, clientId, startTime, endTime, notes } = req.body;
+
+    const [appointment] = await db
+      .insert(appointmentsTable)
+      .values({
+        caregiverId,
+        clientId,
+        startTime: new Date(startTime), // Ensure conversion to JS Date objects
+        endTime: new Date(endTime),
+        notes,
+        status: "scheduled",
+      })
+      .returning();
+
+    res.status(201).json(appointment);
+  } catch (err) {
+    res.status(500).json({ error: "Booking failed" });
+  }
+}

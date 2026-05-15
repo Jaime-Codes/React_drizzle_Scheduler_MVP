@@ -52,3 +52,23 @@ export const setCaregiverAvailability = async (
     res.status(500).json({ error: "Could not sync profiles" });
   }
 };
+
+export async function addAvailabilityBlock(req: Request, res: Response) {
+  try {
+    const { caregiverId, dayOfWeek, startTime, endTime } = req.body;
+
+    const [slot] = await db
+      .insert(caregiverAvailabilityTable)
+      .values({
+        caregiverId,
+        dayOfWeek, // Integer: 0 (Sunday) to 6 (Saturday)
+        startTime, // String format matching Mantine: "09:00"
+        endTime, // String format matching Mantine: "17:00"
+      })
+      .returning();
+
+    res.status(201).json(slot);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to save availability" });
+  }
+}
