@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     image: postgres:15
@@ -13,37 +11,6 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - scheduler_network
-
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: scheduler_backend_container
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_URL: postgres://dev_user:dev_password@db:5432/schedule_db
-      PORT: 3000
-    depends_on:
-      - db
-    networks:
-      - scheduler_network
-
-  frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    container_name: scheduler_frontend_container
-    restart: always
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-    networks:
-      - scheduler_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -56,12 +23,6 @@ services:
       - "127.0.0.1:8080:80"
     depends_on:
       - db
-    networks:
-      - scheduler_network
 
 volumes:
   postgres_data:
-
-networks:
-  scheduler_network:
-    driver: bridge
