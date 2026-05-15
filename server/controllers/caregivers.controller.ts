@@ -8,8 +8,6 @@ export async function getCaregiverDashboardData(
   res: Response,
 ): Promise<void> {
   try {
-    // Assuming your JWT auth middleware attaches the logged-in caregiver's ID here
-    console.log("the request params", req);
     const caregiverId = parseInt(req.params.caregiverId as string);
 
     if (!caregiverId) {

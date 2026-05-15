@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_DATA } from "../constants";
 
-interface User {
+export interface User {
   id: number;
   email: string;
   profileId: number | null;
