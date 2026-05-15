@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const { drizzle } = require("drizzle-orm/node-postgres");
 const { Pool } = require("pg");
+// Change this line if it is inside server/drizzle/src/db/schema
 const {
   usersTable,
   caregiverTable,
