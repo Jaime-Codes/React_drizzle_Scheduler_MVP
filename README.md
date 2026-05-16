@@ -1,6 +1,6 @@
 # Caregiver and Client Scheduling Hub (MVP Prototype)
 
-This application is a functional Minimum Viable Product (MVP) built over a tight timeline of a few days. It serves as a structural proof-of-concept for home care scheduling automation. Caregivers declare recurring weekly shift parameters, and clients select validated 1-hour service windows matching those active parameters.
+functional Minimum Viable Product (MVP) built over a tight timeline. It serves as a proof-of-concept for home care scheduling automation. Caregivers declare recurring weekly shift parameters, and clients select validated 1-hour service windows matching those active parameters.
 
 ## Core Application Features
 
