@@ -1,6 +1,6 @@
 # Caregiver and Client Scheduling Hub (MVP Prototype)
 
-This application is a functional Minimum Viable Product (MVP) built over a tight timeline of a few days. It serves as a structural proof-of-concept for home care scheduling automation. Caregivers declare recurring weekly shift parameters, and clients select validated 1-hour service windows matching those active parameters.
+functional Minimum Viable Product (MVP) built over a tight timeline. It serves as a proof-of-concept for home care scheduling automation. Caregivers declare recurring weekly shift parameters, and clients select validated 1-hour service windows matching those active parameters.
 
 ## Core Application Features
 
@@ -15,15 +15,23 @@ This application is a functional Minimum Viable Product (MVP) built over a tight
 - Backend: Node.js, Express API Gateway (CommonJS modules), JWT, Bcrypt
 - Database and ORM: PostgreSQL database engine, Drizzle ORM
 - Containerization: Multi-container deployment via Docker Compose
+## screenshots
+
+<img width="1421" height="677" alt="Screenshot 2026-05-15 at 9 43 26 PM" src="https://github.com/user-attachments/assets/58ac0311-ddcf-43b6-b9b5-005cdb1cb493" />
+<img width="1432" height="707" alt="Screenshot 2026-05-15 at 9 42 56 PM" src="https://github.com/user-attachments/assets/730ad7a3-a2e8-4119-b0a8-b996c5548da9" />
+<img width="1433" height="706" alt="Screenshot 2026-05-15 at 9 42 08 PM" src="https://github.com/user-attachments/assets/9cec8a59-20bc-47bc-a0da-80c973b4d3fe" />
+<img width="1433" height="699" alt="Screenshot 2026-05-15 at 9 41 25 PM" src="https://github.com/user-attachments/assets/11ff6621-f261-4281-8e2a-2e7f84022cb3" />
+<img width="1431" height="699" alt="Screenshot 2026-05-15 at 9 40 32 PM" src="https://github.com/user-attachments/assets/72797474-c16b-40fc-a241-bef879f97fa6" />
+<img width="1427" height="709" alt="Screenshot 2026-05-15 at 9 39 24 PM" src="https://github.com/user-attachments/assets/e9db5001-642b-433b-8ab6-1e13f8b5a283" />
 
 ## Environment Initialisation
 
 ### 1. Configuration Setup
 
 Create a file named `.env` in your root backend folder directory containing the local network configuration variables:
-
+the DB string may need to be adjusted depending on how docker is being run locally (i used orbstack DATABASE_URL=postgres://dev_user:dev_password@scheduler_db_container.orb.local:5432/schedule_db)
 ```text
-DATABASE_URL=postgres://dev_user:dev_password@db:5432/schedule_db
+DATABASE_URL=postgres://dev_user:dev_password@db:5432/schedule_db 
 PORT=3000
 JWT_ACCESS_SECRET=your_hex_access_string_here
 JWT_REFRESH_SECRET=your_hex_refresh_string_here
@@ -36,26 +44,30 @@ From the root repository folder containing your docker-compose.yml file, run the
 ```bash
 docker compose up --build
 ```
-
+-install npm packages on client & server
+```bash
+npm i
+```
 - Frontend client maps to: http://localhost:5173
 - API gateway server maps to: http://localhost:3000
 - Database management utility maps to: http://localhost:8080 (User: admin@example.com | Pass: admin)
 
-### 3. Synchronize Database Tables
+### 3. Synchronize Database Tables (must be in server dir)
 
 Once console outputs verify the database container has finished booting, open a separate terminal window and execute the schema migrations:
 
 ```bash
-npx drizzle-kit generate
-npx drizzle-kit migrate
+npm run db:gen
+npm run db:migrate
+
 ```
 
-### 4. Inject Mock Testing Profiles (Seeding)
+### 4. Inject Mock Testing Profiles (Seeding) (must be in server dir)
 
 To bypass the manual registration flows and test the cross-role features immediately, seed the database tables using the test utility script:
 
 ```bash
-docker compose exec backend npm run seed
+npm run db:seed
 ```
 
 This registers two accounts inside the system instantly:
@@ -65,10 +77,10 @@ This registers two accounts inside the system instantly:
 
 ## Automated Reset Hook
 
-To flush active user testing states out of the schedules and revert the platform cleanly back to its baseline default configuration, run the reset utility:
+To flush active user testing states out of the schedules and revert the platform cleanly back to its baseline default configuration, run the reset utility: (must be in server dir)
 
 ```bash
-docker compose exec backend node scripts/reset.js
+npm run db:reset
 ```
 
 ## Post-MVP Production Backlog
